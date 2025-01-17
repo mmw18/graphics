@@ -1,0 +1,26 @@
+{
+    "name": "graphics-viewing",
+    "version": "1.0.0",
+    "description": "WebGL viewer - Module 5 CT",
+    "main": "Module5/index.js",
+    "scripts": {
+        "serve": "vite",
+        "build": "vite build"
+    },
+    "keywords": [
+        "WebGL",
+        "graphics",
+        "viewer",
+        "orthographic"
+    ],
+    "author": "Megan Wright",
+    "license": "ISC",
+    "dependencies": {
+        "gl-matrix": "^2.8.1"
+    },
+    "devDependencies": {
+        "@types/gl-matrix": "^3.2.0",
+        "live-server": "^1.2.2",
+        "vite": "^6.0.7"
+    }
+}

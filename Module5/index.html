@@ -2,30 +2,54 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Module 5 - Viewer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5 - WebGL Viewing</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #202020;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            display: block;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+        .controls label {
+            margin-right: 10px;
+        }
+    </style>
 </head>
 <body>
+    <h1>WebGL Cube Viewer</h1>
     <canvas id="glCanvas" width="600" height="600"></canvas>
-    <div>
-        <label>Radius:
-            <input id="radiusSlider" type="range" min="1" max="10" step="0.1" value="2">
-        </label>
+
+    <div class="controls">
+        <div>
+            <label for="distanceSlider">Distance</label>
+            <input id="distanceSlider" type="range" min="1" max="5" step="0.1" value="2">
+        </div>
+        <div>
+            <label for="horizontalRotationSlider">Horizontal Rotation</label>
+            <input id="horizontalRotationSlider" type="range" min="0" max="6.28" step="0.01" value="1">
+        </div>
+        <div>
+            <label for="verticalRotationSlider">Vertical Rotation</label>
+            <input id="verticalRotationSlider" type="range" min="0" max="6.28" step="0.01" value="1">
+        </div>
+        <div>
+            <label for="viewDepthSlider">View Depth</label>
+            <input id="viewDepthSlider" type="range" min="2" max="10" step="0.1" value="5">            
+        </div>
     </div>
-    <div>
-        <label>Theta:
-            <input id="thetaSlider" type="range" min="0" max="6.28" step="0.01" value="1">
-        </label>
-    </div>
-    <div>
-        <label>Phi:
-            <input id="phiSlider" type="range" min="0" max="6.28" step="0.01" value="1">
-        </label>
-    </div>
-    <div>
-        <label>Depth:
-            <input id="depthSlider" type="range" min="1" max="5" step="0.1" value="2">
-        </label>
-    </div>
-    <script src="webgl-viewing.js"></script>
+
+    <script type="module" src="\src\webgl-viewing.js"></script>
 </body>
 </html>
