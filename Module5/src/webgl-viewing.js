@@ -169,3 +169,14 @@ function initBuffers(gl) {
 
 // Main function being called upon page load
 main();
+
+/**
+ * REFERENCE:
+ * Angel, E., & Shreiner, D. (2020). Interactive computer graphics (8th ed.). Pearson.
+ * 
+ *  Part of this code was borrowed from my module 4 critical thinking,
+ *   which can be found: https://github.com/mmw18/graphics/tree/master/Module4
+ * 
+ *  This code in it's entirety has been remotely shared to my GitHub account, 
+ *   which can be found: https://github.com/mmw18/graphics/tree/master/Module5
+ */
