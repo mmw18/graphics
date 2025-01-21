@@ -1,13 +1,15 @@
 {
-    "name": "graphics",
-    "version": "1.0.0",
-    "main": "Module4/index.js",
-    "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "description": ""
+  "name": "graphics",
+  "version": "1.0.0",
+  "main": "Module4/index.js",
+"scripts": {
+  "serve": "live-server ."
+},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "live-server": "^1.2.2"
   }
-  
+}

@@ -112,6 +112,14 @@
     const viewMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, -6, 1];
     const movMatrix = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
 
+    // Adding a variable to store the cube's rotation speed
+    let speed = 1.0;
+
+    // Hooking up the slider to dynamically adjust the speed
+    document.getElementById("speedSlider").oninput = function (e) {
+        speed = parseFloat(e.target.value);
+    };
+
     function getProjection(angle, aspect, zMin, zMax) {
         const tanHalfFOV = Math.tan((angle * Math.PI) / 360);
         return [
@@ -156,8 +164,8 @@
         const dt = time - oldTime;
         oldTime = time;
 
-        rotateX(movMatrix, dt * 0.002);
-        rotateY(movMatrix, dt * 0.002);
+        rotateX(movMatrix, dt * 0.002 * speed);
+        rotateY(movMatrix, dt * 0.002 * speed);
 
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.uniformMatrix4fv(Pmatrix, false, projMatrix);
