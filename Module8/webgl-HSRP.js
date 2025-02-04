@@ -241,3 +241,14 @@ function transformVertex(matrix, vertex) {
 
 // Start the app! (:
 startWebGLApp();
+
+/**
+ * REFERENCE:
+ * Angel, E., & Shreiner, D. (2020). Interactive computer graphics (8th ed.). Pearson.
+ * 
+ *  Part of this code was borrowed from my module 6 critical thinking,
+ *   which can be found: https://github.com/mmw18/graphics/tree/master/Module6
+ * 
+ *  This code in it's entirety has been remotely shared to my GitHub account, 
+ *   which can be found: https://github.com/mmw18/graphics/tree/master/Module8
+ */
