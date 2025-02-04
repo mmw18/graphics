@@ -2,6 +2,16 @@ import * as glMatrix from 'gl-matrix';
 const mat4 = glMatrix.mat4;
 const vec3 = glMatrix.vec3;
 
+// Defining colors globally so it can be referenced
+const pinkColors = [
+    1.0, 0.5, 0.5, 1.0, 0.5, 0.5, 1.0, 0.5, 0.5, 1.0, 0.5, 0.5,
+    0.9, 0.4, 0.4, 0.9, 0.4, 0.4, 0.9, 0.4, 0.4, 0.9, 0.4, 0.4,
+    0.8, 0.3, 0.5, 0.8, 0.3, 0.5, 0.8, 0.3, 0.5, 0.8, 0.3, 0.5,
+    0.7, 0.5, 0.6, 0.7, 0.5, 0.6, 0.7, 0.5, 0.6, 0.7, 0.5, 0.6,
+    0.9, 0.5, 0.7, 0.9, 0.5, 0.7, 0.9, 0.5, 0.7, 0.9, 0.5, 0.7,
+    1.0, 0.6, 0.8, 1.0, 0.6, 0.8, 1.0, 0.6, 0.8, 1.0, 0.6, 0.8
+];
+
 // This is the main function to initialize WebGL, set up shaders, buffers, sliders, and rendering
 function main() {
     const canvas = document.getElementById("glCanvas");
@@ -39,6 +49,23 @@ function main() {
     let near = 1.0;
     let far = 5.0;
 
+/**
+ * ---------------------------- Module 8 Changes ------------------------------
+ */
+    let clickedSide = -1; // This is tracking what side has been clicked
+
+    // This is an event listener to listen for the clicks on cube faces
+    canvas.addEventListener("click", (event) => {
+        const faceIndex = whichSideClicked(event, canvas);
+        if (faceIndex !== -1) {
+            clickedSide = faceIndex;
+            highlightSide(gl, colorBuffer, clickedSide);
+        }
+    });
+/**
+ * ---------------------------- Module 8 Changes ------------------------------
+ */
+
     // These sliders will allow interactive control over the cube's transformation and viewing parameters
     document.getElementById("distanceSlider").oninput = (e) => (radius = parseFloat(e.target.value));
     document.getElementById("horizontalRotationSlider").oninput = (e) => (theta = parseFloat(e.target.value));
@@ -47,7 +74,7 @@ function main() {
         const depth = parseFloat(e.target.value);
         near = -depth;
         far = depth;
-    };    
+    };
 
     // Rendering function to update the scene dynamically based on slider values
     function render() {
@@ -90,7 +117,6 @@ function initShaders(gl) {
         uniform mat4 uModelViewMatrix;
         uniform mat4 uProjectionMatrix;
         varying vec3 vColor;
-
         void main(void) {
             gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(position, 1.0);
             vColor = color;
@@ -100,7 +126,6 @@ function initShaders(gl) {
     const fragShaderCode = `
         precision mediump float;
         varying vec3 vColor;
-
         void main(void) {
             gl_FragColor = vec4(vColor, 1.0);
         }
@@ -126,31 +151,24 @@ function initShaders(gl) {
 // This function initializes buffers for the cube's vertices, colors, and indices
 function initBuffers(gl) {
     const vertices = [
-        -1, -1,  1,   1, -1,  1,   1,  1,  1,  -1,  1,  1,
-        -1, -1, -1,  -1,  1, -1,   1,  1, -1,   1, -1, -1,
-        -1,  1, -1,  -1,  1,  1,   1,  1,  1,   1,  1, -1,
-        -1, -1, -1,   1, -1, -1,   1, -1,  1,  -1, -1,  1,
-         1, -1, -1,   1,  1, -1,   1,  1,  1,   1, -1,  1,
-        -1, -1, -1,  -1, -1,  1,  -1,  1,  1,  -1,  1, -1
+        -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1, 1,
+        -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1,
+        -1, 1, -1, -1, 1, 1, 1, 1, 1, 1, 1, -1,
+        -1, -1, -1, 1, -1, -1, 1, -1, 1, -1, -1, 1,
+        1, -1, -1, 1, 1, -1, 1, 1, 1, 1, -1, 1,
+        -1, -1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1
     ];
 
-    const colors = [
-        1.0, 0.5, 0.5, 1.0, 0.5, 0.5, 1.0, 0.5, 0.5, 1.0, 0.5, 0.5,
-        0.9, 0.4, 0.4, 0.9, 0.4, 0.4, 0.9, 0.4, 0.4, 0.9, 0.4, 0.4,
-        0.8, 0.3, 0.5, 0.8, 0.3, 0.5, 0.8, 0.3, 0.5, 0.8, 0.3, 0.5,
-        0.7, 0.5, 0.6, 0.7, 0.5, 0.6, 0.7, 0.5, 0.6, 0.7, 0.5, 0.6,
-        0.9, 0.5, 0.7, 0.9, 0.5, 0.7, 0.9, 0.5, 0.7, 0.9, 0.5, 0.7,
-        1.0, 0.6, 0.8, 1.0, 0.6, 0.8, 1.0, 0.6, 0.8, 1.0, 0.6, 0.8
-    ];
-
-    const indices = [
-         0,  1,  2,   0,  2,  3,
-         4,  5,  6,   4,  6,  7,
-         8,  9, 10,   8, 10, 11,
-        12, 13, 14,  12, 14, 15,
-        16, 17, 18,  16, 18, 19,
-        20, 21, 22,  20, 22, 23
-    ];
+    const indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array([
+        0, 1, 2, 0, 2, 3,
+        4, 5, 6, 4, 6, 7,
+        8, 9, 10, 8, 10, 11,
+        12, 13, 14, 12, 14, 15,
+        16, 17, 18, 16, 18, 19,
+        20, 21, 22, 20, 22, 23
+    ]), gl.STATIC_DRAW);
 
     const vertexBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
@@ -158,14 +176,46 @@ function initBuffers(gl) {
 
     const colorBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
-    const indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pinkColors), gl.STATIC_DRAW);
 
     return { vertexBuffer, colorBuffer, indexBuffer };
 }
+
+/**
+ * ---------------------------- Module 8 Changes ------------------------------
+ */
+// This function is to figure out which side the user has clicked on
+function whichSideClicked(event, canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const x = ((event.clientX - rect.left) / canvas.width) * 2 - 1;
+    const y = -(((event.clientY - rect.top) / canvas.height) * 2 - 1);
+    // approximating which side
+    if (x > 0.5) return 4;
+    if (x < -0.5) return 5;
+    if (y > 0.5) return 2;
+    if (y < -0.5) return 3;
+    if (Math.abs(x) < 0.5 && y > -0.5 && y < 0.5) return 0;
+    return 1;
+}
+
+// This function will update the color buffer to neon green for the selected face, but will keep/correct the rest as is
+function highlightSide(gl, colorBuffer, clickedSide) {
+    const newColors = Array.from(pinkColors);
+    if (clickedSide !== -1) {
+        const startIndex = clickedSide * 12;
+        for (let i = 0; i < 12; i += 3) {
+            newColors[startIndex + i] = 0.0;
+            newColors[startIndex + i + 1] = 1.0;
+            newColors[startIndex + i + 2] = 0.0;
+        }
+    }
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(newColors), gl.STATIC_DRAW);
+}
+/**
+ * ---------------------------- Module 8 Changes ------------------------------
+ */
 
 // Main function being called upon page load
 main();
@@ -173,6 +223,10 @@ main();
 /**
  * REFERENCE:
  * Angel, E., & Shreiner, D. (2020). Interactive computer graphics (8th ed.). Pearson.
+ * 
+ * MozDevNet. (n.d.-b). Element: Getboundingclientrect() method - web apis: MDN. MDN Web Docs. 
+ *         https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect 
+ * 
  * 
  *  Part of this code was borrowed from my module 4 critical thinking,
  *   which can be found: https://github.com/mmw18/graphics/tree/master/Module4
