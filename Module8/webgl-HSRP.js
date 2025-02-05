@@ -1,3 +1,23 @@
+/** Program Overview
+ * 
+ *  This is a WebGl application that will render a sphere to the screen, built of many subdivided tetrahedrons. 
+ * I made use of the gl-matrix library to take care of the matrix and vector math, and the sphere is being generated
+ * by recursively refining a single tetrahedron into a more detailed shape. I used the Painter's algorithm to draw
+ * the sphere, which will sort the triangles by depth to ensure accurate hidden-surface removal without havig to
+ * rely on built in depth testing. Every triangle is given a different color on a gradient, where the triangles
+ * father away are a different color than those closer. This not only helps with being able to actually see the
+ * sorting process but is more visually appealing to the user. I have also added a slider to the screen that
+ * allows the user to change the level of subdivision of the cube at anytime. 
+ * 
+ *  Through the process of building this program I used a combination of my web development background and the
+ * new concepts we learned during this Graphics course. I set up shaders to handle the basic transformations
+ * and coloring, and then manually sorted the triangles with every frame to simulate hidden-surface removal. 
+ * I have the camera positioned using spherical coordinated which ensured I can generate view and projection
+ * matrices on the fly. Overall, was a great challange in tying together coding with WebGl, adding interactivity, 
+ * and being able to clearly demonstrate what is a classic technique in the world of computer science. 
+ * 
+ */
+
 import { mat4, vec3, vec4 } from "gl-matrix";
 
 // This is the main function that will start WebGL and then render the sphere using the Painter's algorithm
